@@ -57,7 +57,7 @@ Vagrant.configure('2') do |config|
       puppet module install puppetlabs-firewall
       puppet module install puppetlabs-java
       puppet module install emccode-scaleio
-      cp -f /tmp/puppet/modules/scaleio/files/* /etc/puppet/modules/scaleio/files/.
+      cp -Rf /opt/puppet/* /etc/puppet/.
       puppet config set --section main parser future
       puppet config set --section master certname puppetmaster.#{node_hash[:domain]}
       /usr/bin/puppet resource service iptables ensure=stopped enable=false
@@ -65,7 +65,7 @@ Vagrant.configure('2') do |config|
     fi
     EOF
     node.vm.provision :shell, :inline => bootstrap_script
-    node.vm.synced_folder "puppet", "/tmp/puppet"
+    node.vm.synced_folder "puppet", "/opt/puppet"
   end
 
 
