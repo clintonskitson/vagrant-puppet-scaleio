@@ -4,10 +4,7 @@ Package {
 }
 
 $version = '1.30-426.0'
-$sds_network = '192.168.50.0/24'
-$mdm_fqdn = ['mdm1.scaleio.local','mdm2.scaleio.local']
 $mdm_ip = ['192.168.50.12','192.168.50.13']
-$tb_fqdn = 'tb.scaleio.local'
 $tb_ip = '192.168.50.11'
 $cluster_name = "cluster1"
 $enable_cluster_mode = true
@@ -75,9 +72,7 @@ node /tb/ {
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
-        mdm_fqdn => $mdm_fqdn,
         tb_ip => $tb_ip,
-        sds_network => $sds_network,
         callhome_cfg => $callhome_cfg,
         sio_sds_device => $sio_sds_device,
         sds_ssd_env_flag => true,
@@ -91,10 +86,8 @@ node /mdm/ {
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
-        mdm_fqdn => $mdm_fqdn,
         tb_ip => $tb_ip,
         cluster_name => $cluster_name,
-        sds_network => $sds_network,
         sio_sds_device => $sio_sds_device,
         sio_sdc_volume => $sio_sdc_volume,
         callhome_cfg => $callhome_cfg,
@@ -108,8 +101,6 @@ node /sds/ {
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
-        mdm_fqdn => $mdm_fqdn,
-        sds_network => $sds_network,
         sio_sds_device => $sio_sds_device,
         sds_ssd_env_flag => true,
         components => ['sds'],
@@ -122,7 +113,6 @@ node /sdc/ {
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
-        mdm_fqdn => $mdm_fqdn,
         components => ['sdc'],
   }
   include scaleio
@@ -133,7 +123,6 @@ node /gw/ {
         gw_password => $gw_password,
         version => $version,
         mdm_ip => $mdm_ip,
-        mdm_fqdn => $mdm_fqdn,
         components => ['gw'],
   }
   include scaleio
