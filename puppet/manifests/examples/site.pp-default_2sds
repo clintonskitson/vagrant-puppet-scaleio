@@ -86,7 +86,7 @@ $callhome_cfg = {
 
 node /tb/ {
   include firewall
-  class {'emcscaleio::params':
+  class {'scaleio::params':
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
@@ -96,12 +96,12 @@ node /tb/ {
         sds_ssd_env_flag => true,
         components => ['tb','sds','sdc','gw'],
   }
-  include emcscaleio
+  include scaleio
 }
 
 node /mdm/ {
   include firewall
-  class {'emcscaleio::params':
+  class {'scaleio::params':
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
@@ -112,12 +112,12 @@ node /mdm/ {
         callhome_cfg => $callhome_cfg,
         components => ['mdm','sds','sdc','callhome'],
   }
-  include emcscaleio
+  include scaleio
 }
 
 node /sds/ {
   include firewall
-  class {'emcscaleio::params':
+  class {'scaleio::params':
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
@@ -125,29 +125,29 @@ node /sds/ {
         sds_ssd_env_flag => true,
         components => ['sds'],
   }
-  include emcscaleio
+  include scaleio
 }
 
 node /sdc/ {
   include firewall
-  class {'emcscaleio::params':
+  class {'scaleio::params':
         password => $password,
         version => $version,
         mdm_ip => $mdm_ip,
         components => ['sdc'],
   }
-  include emcscaleio
+  include scaleio
 }
 
 node /gw/ {
   include firewall
-  class {'emcscaleio::params':
+  class {'scaleio::params':
         gw_password => $gw_password,
         version => $version,
         mdm_ip => $mdm_ip,
         components => ['gw'],
   }
-  include emcscaleio
+  include scaleio
 }
 
 
