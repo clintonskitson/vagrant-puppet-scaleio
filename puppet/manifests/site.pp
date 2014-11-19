@@ -17,7 +17,7 @@ $sio_sds_device = {
             'ip' => '192.168.50.11',
             'protection_domain' => 'protection_domain1', 
             'devices' => {
-              '/home/vagrant/sio_device1' => {  'size' => '100GB', 
+              '/var/sio_device1' => {  'size' => '100GB', 
                                                 'storage_pool' => 'capacity'
                                               },
             }
@@ -26,7 +26,7 @@ $sio_sds_device = {
             'ip' => '192.168.50.12',
             'protection_domain' => 'protection_domain1',
             'devices' => {
-              '/home/vagrant/sio_device1' => {  'size' => '100GB', 
+              '/var/sio_device1' => {  'size' => '100GB', 
                                                 'storage_pool' => 'capacity'
                                               },
             }
@@ -35,7 +35,7 @@ $sio_sds_device = {
             'ip' => '192.168.50.13',
             'protection_domain' => 'protection_domain1',
             'devices' => {
-              '/home/vagrant/sio_device1' => {  'size' => '100GB', 
+              '/var/sio_device1' => {  'size' => '100GB', 
                                                 'storage_pool' => 'capacity'
                                               },
             }
