@@ -3,7 +3,7 @@ Package {
   allow_virtual => true,
 }
 
-$version = '1.30-426.0'
+$version = '1.31-2333.2'
 $mdm_ip = ['192.168.50.12','192.168.50.13']
 $tb_ip = '192.168.50.11'
 $cluster_name = "cluster1"

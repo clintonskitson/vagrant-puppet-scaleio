@@ -3,7 +3,7 @@ Package {
   allow_virtual => true,
 }
 
-$version = '1.30-426.0'
+$version = '1.31-2333.2'
 $mdm_fqdn = ['mdm1.scaleio.local','mdm2.scaleio.local']
 $mdm_ip = [hosts_lookup($mdm_fqdn[0])[0],hosts_lookup($mdm_fqdn[1])[0]]
 $tb_fqdn = 'tb.scaleio.local'
