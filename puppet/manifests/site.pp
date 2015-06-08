@@ -4,6 +4,8 @@ Package {
 }
 
 $version = '1.31-2333.2'
+$rpm_suffix = '.el6.x86_64'
+
 $mdm_ip = ['192.168.50.12','192.168.50.13']
 $tb_ip = '192.168.50.11'
 $cluster_name = "cluster1"
@@ -15,9 +17,9 @@ $gw_password= 'Scaleio123'
 $sio_sds_device = {
           'tb.scaleio.local' => {
             'ip' => '192.168.50.11',
-            'protection_domain' => 'protection_domain1', 
+            'protection_domain' => 'protection_domain1',
             'devices' => {
-              '/var/sio_device1' => {  'size' => '100GB', 
+              '/var/sio_device1' => {  'size' => '100GB',
                                                 'storage_pool' => 'capacity'
                                               },
             }
@@ -26,7 +28,7 @@ $sio_sds_device = {
             'ip' => '192.168.50.12',
             'protection_domain' => 'protection_domain1',
             'devices' => {
-              '/var/sio_device1' => {  'size' => '100GB', 
+              '/var/sio_device1' => {  'size' => '100GB',
                                                 'storage_pool' => 'capacity'
                                               },
             }
@@ -35,7 +37,7 @@ $sio_sds_device = {
             'ip' => '192.168.50.13',
             'protection_domain' => 'protection_domain1',
             'devices' => {
-              '/var/sio_device1' => {  'size' => '100GB', 
+              '/var/sio_device1' => {  'size' => '100GB',
                                                 'storage_pool' => 'capacity'
                                               },
             }
@@ -43,14 +45,14 @@ $sio_sds_device = {
         }
 
 $sio_sdc_volume = {
-          'volume1' => { 'size_gb' => 8, 
-          'protection_domain' => 'protection_domain1', 
+          'volume1' => { 'size_gb' => 8,
+          'protection_domain' => 'protection_domain1',
           'storage_pool' => 'capacity',
           'sdc_ip' => [
               '192.168.50.11',
               '192.168.50.12',
               '192.168.50.13',
-            ] 
+            ]
           },
         }
 
@@ -91,7 +93,7 @@ node /mdm/ {
         sio_sds_device => $sio_sds_device,
         sio_sdc_volume => $sio_sdc_volume,
         callhome_cfg => $callhome_cfg,
-        components => ['mdm','sds','sdc','callhome'],
+        components => ['mdm','sds','sdc','callhome','gw'],
   }
   include scaleio
 }
@@ -127,10 +129,3 @@ node /gw/ {
   }
   include scaleio
 }
-
-
-
-
-
-
-

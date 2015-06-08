@@ -1,14 +1,25 @@
 **Summary - vagrant-puppet-scaleio**
 
-The primary purpose of the Puppet module is to create automation necessary for an Operations team to install and configure ScaleIO nodes using Puppet. As an additional benefit, we provided as a valuable example of Vagrantfiles which allow rapid deployment pre-defined Puppet environments to configure ScaleIO deployments on a laptop or through other Vagrant providers. The project allows for a flexible ScaleIO environment serving for production, demos, or development.
+This repository houses a Vagrantfile and Puppet configuration files that allow you to deploy and scale-up/out a ScaleIO storage environment.  It makes use of the ```puppet-scaleio``` module to perform all of the configuration and ```Vagrant``` to deploy a Puppet Master, configure Puppet with ScaleIO module, and then deploy additional defined ScaleIO nodes.
 
-With a working Puppet environment of server and agents deployed, it is possible to deploy pre-defined massive ScaleIO clusters across any cloud environment in minutes with this module.
+With this Vagrantfile, it is possible to deploy pre-defined ScaleIO clusters.  Further, the ScaleIO puppet module allows you to deploy massive descriptive ScaleIO clusters across any environment, physical or virtual in minutes.
+
+**ScaleIO Downloads**
+A new feature of this Vagrantfile is to download the latest ScaleIO RPM's automatically.  This is done automatically and can be disabled by editing the Vagrantfile and commenting out ```download_scaleio```.
+
+**Instructions**
+- git clone https://github.com/emccode/vagrant-puppet-scaleio
+- (optional) copy ScaleIO RPM's into puppet/modules/scaleio/files/
+ - (optional) update puppet/manifests/site.pp file to make $version align to files
+- vagrant up
+- vagrant ssh mdm1
+- ..scli away!
 
 **Puppet Module Repository**
 
-For reference you can review the Puppet module repos at <a href="https://github.com/emccode/puppet-scaleio">Github</a> and <a href="https://forge.puppetlabs.com/emccode/scaleio/readme">Puppet Forge</a>. 
+For reference you can review the Puppet module repos at <a href="https://github.com/emccode/puppet-scaleio">Github</a> and <a href="https://forge.puppetlabs.com/emccode/scaleio/readme">Puppet Forge</a>.
 
-**Features**
+**Puppet Module Features**
 
 - Puppet Agent installs proper RPMs for components
 - Configures firewall settings
@@ -50,4 +61,3 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 **Support**  
 Please file bugs and issues at the <a href="https://github.com/emccode/puppet-scaleio/issues">Github issues</a> page.  For more general discussions you can contact the EMC Code team at <a href="https://groups.google.com/forum/#!forum/emccode-users">Google Groups</a>.  The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
-
