@@ -28,22 +28,42 @@ scaleio_nodes = {
   'mdm2' => { :ip => '192.168.50.13', :hostname => 'mdm2', :domain => 'scaleio.local', :memory => 1024, :cpus => 1 },
 }
 
-# (optional) specify download path, or comment out with # and specify
+# (optional) specify download path, or skip by removing path and leaving "", or copy scaleio rpms manually
+# to puppet/modules/scaleio/files and update
 # $version and $rpm_suffix in site.pp file
-#download_scaleio = "ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip"
-download_scaleio = ""
+download_scaleio = "ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip"
+
+download_docker_experimental = "https://github.com/emccode/dogged/releases/download/docker_1.7.0-rc3/docker-1.7.0-rc3"
+download_rexraycli = "https://github.com/emccode/rexraycli/releases/download/latest/rexray-Linux-x86_64"
 
 if download_scaleio != ""
   perform_download = <<-EOF
-    wget -nv ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip -O /tmp/ScaleIO_RHEL6_Download.zip
+    yum --nogpgcheck -y install unzip
+    echo 'Performing a ~250MB download of ScaleIO RPMs'
+    wget -nv #{download_scaleio} -O /tmp/ScaleIO_RHEL6_Download.zip
     unzip -o /tmp/ScaleIO_RHEL6_Download.zip -d /tmp/scaleio/
-    cp /tmp/scaleio/ScaleIO_*_RHEL6*/*.rpm /etc/puppet/modules/scaleio/files/.
+    cp /tmp/scaleio/ScaleIO_*_RHEL7_Download/*.rpm /etc/puppet/modules/scaleio/files/.
     cp /tmp/scaleio/ScaleIO_*_Gateway_*_Download/*.rpm /etc/puppet/modules/scaleio/files/.
-    version=`basename /tmp/scaleio/ScaleIO_*_RHEL6_Download/EMC-ScaleIO-mdm* .el6.x86_64.rpm | cut -d- -f4,5,6`
+    version=`basename /tmp/scaleio/ScaleIO_*_RHEL7_Download/EMC-ScaleIO-mdm* .el7.x86_64.rpm | cut -d- -f4,5,6`
     sed -i "/\\$version = /c\\\\\\$version = \'$version\'" /etc/puppet/manifests/site.pp
   EOF
 end
 
+if download_docker_experimental != ""
+  perform_docker_experimental_download = <<-EOF
+    echo 'Performing 10MB download of Docker experimental build'
+    wget -nv #{download_docker_experimental} -O /bin/docker
+    chmod +x /bin/docker
+  EOF
+end
+
+if download_rexraycli != ""
+  perform_rexraycli_download = <<-EOF
+    echo 'Performing 10MB download of Rexraycli'
+    wget -nv #{download_rexraycli} -O /bin/rexray
+    chmod +x /bin/rexray
+  EOF
+end
 
 Vagrant.configure('2') do |config|
   config.ssh.insert_key = false
@@ -51,7 +71,7 @@ Vagrant.configure('2') do |config|
   config.hostmanager.include_offline = true
   config.vm.define puppetmaster_nodes['puppetmaster'][:hostname] do |node|
     node_hash = puppetmaster_nodes['puppetmaster']
-    node.vm.box = 'puppetlabs/centos-7.0-64-nocm'
+    node.vm.box = 'boxcutter/centos71'
     node.vm.hostname = "#{node_hash[:hostname]}.#{node_hash[:domain]}"
     node.vm.provider "virtualbox" do |vb|
       vb.memory = node_hash[:memory] || 1024
@@ -99,7 +119,7 @@ Vagrant.configure('2') do |config|
 
     config.vm.define node_name do |node|
       node_hash = scaleio_nodes[node_name]
-      node.vm.box = 'puppetlabs/centos-7.0-64-nocm'
+      node.vm.box = 'boxcutter/centos71'
       node.vm.hostname = "#{node_hash[:hostname]}.#{node_hash[:domain]}"
       node.vm.provider "virtualbox" do |vb|
         vb.memory = node_hash[:memory] || 1024
@@ -125,7 +145,47 @@ Vagrant.configure('2') do |config|
         puppet agent -t --detailed-exitcodes || [ $? -eq 2 ]
       fi
 
+      if which docker > /dev/null 2>&1; then
+        echo 'Docker Installed.'
+        systemctl stop docker
+      else
+        yum install -y docker-io
+        systemctl stop docker
+      fi
+      rm -Rf /var/lib/docker
+
+      #{perform_docker_experimental_download}
+      systemctl start docker
+
+      #{perform_rexraycli_download}
+
+      echo 'GOSCALEIO_ENDPOINT=https://192.168.50.12/api' >> /etc/environment
+      echo 'GOSCALEIO_INSECURE=true' >> /etc/environment
+      echo 'GOSCALEIO_USERNAME=admin' >> /etc/environment
+      echo 'GOSCALEIO_PASSWORD=Scaleio123' >> /etc/environment
+      echo 'GOSCALEIO_SYSTEM=cluster1' >> /etc/environment
+      echo 'GOSCALEIO_PROTECTIONDOMAIN=protection_domain1' >> /etc/environment
+      echo 'GOSCALEIO_STORAGEPOOL=capacity' >> /etc/environment
+
+      echo '[Unit]
+Description=Start Rex-RAY Service
+Before=docker.service
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStart=/bin/rexray --daemon
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=docker.service' >> /usr/lib/systemd/system/rexray.service
+      systemctl daemon-reload
+      systemctl start rexray.service
+
+
       EOF
+
       node.vm.provision :shell, :inline => bootstrap_script
 
     end
