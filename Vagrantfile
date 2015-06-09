@@ -7,8 +7,9 @@
 #   vagrant plugin install vagrant-auto_network ~> 1.0.0
 #
 
-Vagrant.require_version ">= 1.5.0"
+Vagrant.require_version ">= 1.7.2"
 require 'vagrant-hosts'
+require 'vagrant-hostmanager'
 require 'vagrant-auto_network'
 
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
@@ -29,9 +30,10 @@ scaleio_nodes = {
 
 # (optional) specify download path, or comment out with # and specify
 # $version and $rpm_suffix in site.pp file
-download_scaleio = "ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip"
+#download_scaleio = "ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip"
+download_scaleio = ""
 
-if download_scaleio
+if download_scaleio != ""
   perform_download = <<-EOF
     wget -nv ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip -O /tmp/ScaleIO_RHEL6_Download.zip
     unzip -o /tmp/ScaleIO_RHEL6_Download.zip -d /tmp/scaleio/
@@ -44,10 +46,12 @@ end
 
 
 Vagrant.configure('2') do |config|
-
+  config.ssh.insert_key = false
+  config.hostmanager.enabled=true
+  config.hostmanager.include_offline = true
   config.vm.define puppetmaster_nodes['puppetmaster'][:hostname] do |node|
     node_hash = puppetmaster_nodes['puppetmaster']
-    node.vm.box = 'puppetlabs/centos-6.6-64-nocm'
+    node.vm.box = 'puppetlabs/centos-7.0-64-nocm'
     node.vm.hostname = "#{node_hash[:hostname]}.#{node_hash[:domain]}"
     node.vm.provider "virtualbox" do |vb|
       vb.memory = node_hash[:memory] || 1024
@@ -65,8 +69,9 @@ Vagrant.configure('2') do |config|
     if which puppet > /dev/null 2>&1; then
       echo 'Puppet Installed.'
     else
+      yum remove -y firewalld && yum install -y iptables-services && iptables --flush
       echo 'Installing Puppet Master.'
-      rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-10.noarch.rpm
+      rpm -ivh http://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-10.noarch.rpm
       yum --nogpgcheck -y install puppet-server
       echo '*.#{node_hash[:domain]}' > /etc/puppet/autosign.conf
       puppet module install puppetlabs-stdlib
@@ -94,7 +99,7 @@ Vagrant.configure('2') do |config|
 
     config.vm.define node_name do |node|
       node_hash = scaleio_nodes[node_name]
-      node.vm.box = 'puppetlabs/centos-6.6-64-nocm'
+      node.vm.box = 'puppetlabs/centos-7.0-64-nocm'
       node.vm.hostname = "#{node_hash[:hostname]}.#{node_hash[:domain]}"
       node.vm.provider "virtualbox" do |vb|
         vb.memory = node_hash[:memory] || 1024
@@ -112,8 +117,9 @@ Vagrant.configure('2') do |config|
       if which puppet > /dev/null 2>&1; then
         echo 'Puppet Installed.'
       else
+        yum remove -y firewalld && yum install -y iptables-services && iptables --flush
         echo 'Installing Puppet Agent.'
-        rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-10.noarch.rpm
+        rpm -ivh http://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-10.noarch.rpm
         yum --nogpgcheck -y install puppet
         puppet config set --section main server #{puppetmaster_nodes['puppetmaster'][:hostname]}.#{puppetmaster_nodes['puppetmaster'][:domain]}
         puppet agent -t --detailed-exitcodes || [ $? -eq 2 ]

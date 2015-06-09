@@ -3,8 +3,8 @@ Package {
   allow_virtual => true,
 }
 
-$version = '1.31-2333.2'
-$rpm_suffix = '.el6.x86_64'
+$version = '1.32-402.1'
+$rpm_suffix = '.el7.x86_64'
 
 $mdm_ip = ['192.168.50.12','192.168.50.13']
 $tb_ip = '192.168.50.11'
@@ -73,6 +73,7 @@ node /tb/ {
   class {'scaleio::params':
         password => $password,
         version => $version,
+        rpm_suffix => $rpm_suffix,
         mdm_ip => $mdm_ip,
         tb_ip => $tb_ip,
         callhome_cfg => $callhome_cfg,
@@ -87,6 +88,7 @@ node /mdm/ {
   class {'scaleio::params':
         password => $password,
         version => $version,
+        rpm_suffix => $rpm_suffix,
         mdm_ip => $mdm_ip,
         tb_ip => $tb_ip,
         cluster_name => $cluster_name,
@@ -102,6 +104,7 @@ node /sds/ {
   class {'scaleio::params':
         password => $password,
         version => $version,
+        rpm_suffix => $rpm_suffix,
         mdm_ip => $mdm_ip,
         sio_sds_device => $sio_sds_device,
         sds_ssd_env_flag => true,
@@ -114,6 +117,7 @@ node /sdc/ {
   class {'scaleio::params':
         password => $password,
         version => $version,
+        rpm_suffix => $rpm_suffix,
         mdm_ip => $mdm_ip,
         components => ['sdc'],
   }
@@ -124,6 +128,7 @@ node /gw/ {
   class {'scaleio::params':
         gw_password => $gw_password,
         version => $version,
+        rpm_suffix => $rpm_suffix,
         mdm_ip => $mdm_ip,
         components => ['gw'],
   }
