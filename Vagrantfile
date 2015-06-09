@@ -36,7 +36,6 @@ if download_scaleio
     wget -nv ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip -O /tmp/ScaleIO_RHEL6_Download.zip
     unzip -o /tmp/ScaleIO_RHEL6_Download.zip -d /tmp/scaleio/
     cp /tmp/scaleio/ScaleIO_*_RHEL6*/*.rpm /etc/puppet/modules/scaleio/files/.
-    cp /tmp/scaleio/ScaleIO_*_Gateway_*_Download/*.rpm /etc/puppet/modules/scaleio/files/.
     version=`basename /tmp/scaleio/ScaleIO_*_RHEL6_Download/EMC-ScaleIO-mdm* .el6.x86_64.rpm | cut -d- -f4,5,6`
     sed -i "/\\$version = /c\\\\\\$version = \'$version\'" /etc/puppet/manifests/site.pp
   EOF

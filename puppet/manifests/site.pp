@@ -93,7 +93,7 @@ node /mdm/ {
         sio_sds_device => $sio_sds_device,
         sio_sdc_volume => $sio_sdc_volume,
         callhome_cfg => $callhome_cfg,
-        components => ['mdm','sds','sdc','callhome','gw'],
+        components => ['mdm','sds','sdc','callhome'],
   }
   include scaleio
 }
