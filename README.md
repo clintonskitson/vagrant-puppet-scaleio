@@ -22,9 +22,21 @@ A new feature of this Vagrantfile is to download the latest ScaleIO RPM's automa
  
 Clone the branch that has the experimental version of docker along with rexray integration and `vagrant up`
 ```
-git clone -b docker_1.7rc3_experimental_rexray https://github.com/emccode/vagrant-puppet-scaleio.git
-cd vagrant-puppet-scaleio
-vagrant up
+- git clone -b docker_1.7rc3_experimental_rexray https://github.com/emccode/vagrant-puppet-scaleio.git
+- cd vagrant-puppet-scaleio
+- vagrant up
+- vagrant ssh mdm1
+- sudo su
+- rexray get-instance
+- rexray new-volume --volumename=testing1 --size=8 (test rexray with new-volume)
+- docker run --volume-driver=rexray -ti -v newvol:/newvol busybox (create another volume directly from docker)
+- touch /newvol/test
+- exit (exit from container)
+- exit (exit from mdm1)
+- vagrant ssh mdm2
+- sudo su
+- docker run --volume-driver=rexray -ti -v newvol:/newvol busybox (attach volume to anther OS and container)
+- ls /newvol (look for test file)
 ```
 
 Vagrant will provision a puppet-master that holds the configurations for the tie breaker and mdm machines. these three hosts have a direct attached disk and will form a scaleio cluster where all data will be replicated between the three hosts. this process usually takes about 5-10 minutes. SSH into `mdm1` and get root access
