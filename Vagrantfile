@@ -176,7 +176,8 @@ EnvironmentFile=/etc/environment
 ExecStart=/bin/rexray --daemon
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
-Restart=on-failure
+Restart=always
+StartLimitInterval=0
 
 [Install]
 WantedBy=docker.service' >> /usr/lib/systemd/system/rexray.service
