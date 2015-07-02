@@ -8,14 +8,6 @@ With this Vagrantfile, it is possible to deploy pre-defined ScaleIO clusters.  F
 A new feature of this Vagrantfile is to download the latest ScaleIO RPM's automatically.  This is done automatically and can be disabled by editing the Vagrantfile and commenting out ```download_scaleio```.
 
 **Instructions**
-- git clone https://github.com/emccode/vagrant-puppet-scaleio
-- (optional) copy ScaleIO RPM's into puppet/modules/scaleio/files/
- - (optional) update puppet/manifests/site.pp file to make $version align to files
-- vagrant up
-- vagrant ssh mdm1
-- ..scli away!
-
-
 - git clone -b docker_1.7rc3_experimental_rexray https://github.com/emccode/vagrant-puppet-scaleio.git
 - cd vagrant-puppet-scaleio
 - vagrant up
