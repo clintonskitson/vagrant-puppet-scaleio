@@ -15,6 +15,25 @@ A new feature of this Vagrantfile is to download the latest ScaleIO RPM's automa
 - vagrant ssh mdm1
 - ..scli away!
 
+
+- git clone -b docker_1.7rc3_experimental_rexray https://github.com/emccode/vagrant-puppet-scaleio.git
+- cd vagrant-puppet-scaleio
+- vagrant up
+- vagrant ssh mdm1
+- sudo su
+- rexray get-instance
+- rexray new-volume --volumename=testing1 --size=8 (test rexray with new-volume)
+- docker run --volume-driver=rexray -ti -v newvol:/newvol busybox (create another volume directly from docker)
+- touch /newvol/test
+- exit (exit from container)
+- exit (exit from mdm1)
+- vagrant ssh mdm2
+- sudo su
+- docker run --volume-driver=rexray -ti -v newvol:/newvol busybox (attach volume to anther OS and container)
+- ls /newvol (look for test file)
+
+
+
 **Puppet Module Repository**
 
 For reference you can review the Puppet module repos at <a href="https://github.com/emccode/puppet-scaleio">Github</a> and <a href="https://forge.puppetlabs.com/emccode/scaleio/readme">Puppet Forge</a>.
