@@ -122,7 +122,7 @@ Vagrant.configure('2') do |config|
       node.vm.box = 'boxcutter/centos71'
       node.vm.hostname = "#{node_hash[:hostname]}.#{node_hash[:domain]}"
       node.vm.provider "virtualbox" do |vb|
-        vb.memory = node_hash[:memory] || 1024
+        vb.memory = node_hash[:memory] || 2048
         vb.cpus = node_hash[:cpus] || 1
       end
 
@@ -147,14 +147,20 @@ Vagrant.configure('2') do |config|
 
       if which docker > /dev/null 2>&1; then
         echo 'Docker Installed.'
-        systemctl stop docker
       else
         yum install -y docker-io
-        systemctl stop docker
       fi
-      rm -Rf /var/lib/docker
+      systemctl stop docker
 
+      rm -Rf /var/lib/docker
       #{perform_docker_experimental_download}
+
+      sed -i -e \"s/^OPTIONS=/#OPTIONS=/g\" /etc/sysconfig/docker
+      sed -i -e \"s/^DOCKER_STORAGE_OPTIONS=/#DOCKER_STORAGE_OPTIONS=/g\" /etc/sysconfig/docker-storage
+      sed -i -e \"s/^Wants=.*//g\" /usr/lib/systemd/system/docker.service
+      rm -f /usr/lib/systemd/system/docker-storage-setup.service
+      systemctl daemon-reload
+
       systemctl start docker
 
       #{perform_rexraycli_download}
