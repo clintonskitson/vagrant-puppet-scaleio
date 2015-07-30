@@ -24,6 +24,7 @@ Clone the branch that has the experimental version of docker along with rexray i
 ```
 - git clone -b docker_1.7rc3_experimental_rexray https://github.com/emccode/vagrant-puppet-scaleio.git
 - cd vagrant-puppet-scaleio
+- vagrant plugin install vagrant-hosts vagrant-hostmanager vagrant-auto_network
 - vagrant up
 - vagrant ssh mdm1
 - sudo su
