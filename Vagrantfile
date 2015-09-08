@@ -33,7 +33,7 @@ scaleio_nodes = {
 # $version and $rpm_suffix in site.pp file
 download_scaleio = "ftp://ftp.emc.com/Downloads/ScaleIO/ScaleIO_RHEL6_Download.zip"
 
-download_docker_experimental = "https://github.com/emccode/dogged/releases/download/docker_1.7.0-rc3/docker-1.7.0-rc3"
+download_docker_experimental = "https://experimental.docker.com/builds/Linux/x86_64/docker-latest"
 download_rexraycli = "https://github.com/emccode/rexray/releases/download/latest/rexray-Linux-x86_64"
 
 if download_scaleio != ""
