@@ -173,23 +173,8 @@ Vagrant.configure('2') do |config|
       echo 'GOSCALEIO_PROTECTIONDOMAIN=protection_domain1' >> /etc/environment
       echo 'GOSCALEIO_STORAGEPOOL=capacity' >> /etc/environment
 
-      echo '[Unit]
-Description=Start Rex-RAY Service
-Before=docker.service
-
-[Service]
-EnvironmentFile=/etc/environment
-ExecStart=/bin/rexray --daemon
-ExecReload=/bin/kill -HUP $MAINPID
-KillMode=process
-Restart=always
-StartLimitInterval=0
-
-[Install]
-WantedBy=docker.service' >> /usr/lib/systemd/system/rexray.service
-      systemctl daemon-reload
-      systemctl start rexray.service
-
+      curl -sSL https://dl.bintray.com/emccode/rexray/install | sh -
+      systemctl rexray start
 
       EOF
 
