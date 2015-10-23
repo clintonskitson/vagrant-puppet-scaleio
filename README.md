@@ -71,4 +71,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 
 **Support**  
-Please file bugs and issues at the <a href="https://github.com/emccode/puppet-scaleio/issues">Github issues</a> page.  For more general discussions you can contact the EMC Code team at <a href="https://groups.google.com/forum/#!forum/emccode-users">Google Groups</a>.  The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
+Please file bugs and issues at the <a href="https://github.com/emccode/puppet-scaleio/issues">Github issues</a> page.  This is to help keep track and document everything related to this repo. For general discussions and further support you can join the [EMC {code} Community slack channel](http://community.emccode.com/). Lastly, for questions asked on [Stackoverflow.com](https://stackoverflow.com) please tag them with **EMC**. The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
