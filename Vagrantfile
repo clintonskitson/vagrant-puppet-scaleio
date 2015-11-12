@@ -170,6 +170,7 @@ Vagrant.configure('2') do |config|
       echo 'GOSCALEIO_SYSTEMNAME=cluster1' >> /etc/environment
       echo 'GOSCALEIO_PROTECTIONDOMAIN=protection_domain1' >> /etc/environment
       echo 'GOSCALEIO_STORAGEPOOL=capacity' >> /etc/environment
+      echo 'REXRAY_STORAGEDRIVERS=scaleio' >> /etc/environment
 
       curl -sSL https://dl.bintray.com/emccode/rexray/install | sh -
       systemctl rexray start
