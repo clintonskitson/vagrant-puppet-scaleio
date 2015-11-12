@@ -51,17 +51,15 @@ end
 
 if download_docker_experimental != ""
   perform_docker_experimental_download = <<-EOF
-    echo 'Performing 10MB download of Docker experimental build'
-    wget -nv #{download_docker_experimental} -O /bin/docker
-    chmod +x /bin/docker
+    echo 'Performing 10MB download of Docker build'
+    curl -sSL https://get.docker.com/ | sh
   EOF
 end
 
 if download_rexraycli != ""
   perform_rexraycli_download = <<-EOF
-    echo 'Performing 10MB download of Rexraycli'
-    wget -nv #{download_rexraycli} -O /bin/rexray
-    chmod +x /bin/rexray
+    echo 'Performing 10MB download of REX-Ray'
+    curl -sSL https://dl.bintray.com/emccode/rexray/install | sh -
   EOF
 end
 
