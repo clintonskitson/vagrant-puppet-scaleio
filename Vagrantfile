@@ -167,7 +167,7 @@ Vagrant.configure('2') do |config|
       echo 'GOSCALEIO_INSECURE=true' >> /etc/environment
       echo 'GOSCALEIO_USERNAME=admin' >> /etc/environment
       echo 'GOSCALEIO_PASSWORD=Scaleio123' >> /etc/environment
-      echo 'GOSCALEIO_SYSTEM=cluster1' >> /etc/environment
+      echo 'GOSCALEIO_SYSTEMNAME=cluster1' >> /etc/environment
       echo 'GOSCALEIO_PROTECTIONDOMAIN=protection_domain1' >> /etc/environment
       echo 'GOSCALEIO_STORAGEPOOL=capacity' >> /etc/environment
 
